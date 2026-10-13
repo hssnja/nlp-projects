@@ -19,6 +19,14 @@ class TokenizerTests(unittest.TestCase):
         self.assertEqual(tokenize("سلام، دنیا.", prediction_mode=True),
                          ["سلام", "دنیا"])
 
+    def test_arabic_letter_variants(self):
+        for mode in (False, True):
+            with self.subTest(prediction_mode=mode):
+                self.assertEqual(
+                    tokenize("يك کتاب یک كتاب", prediction_mode=mode),
+                    ["یک", "کتاب", "یک", "کتاب"],
+                )
+
     def test_original_project_difference(self):
         self.assertEqual(tokenize(".5"), [".", "5"])
         self.assertEqual(tokenize(".5", prediction_mode=True), [".5"])
@@ -55,6 +63,14 @@ class PredictorTests(unittest.TestCase):
         for corpus in ["", " \n", ". ،"]:
             with self.subTest(corpus=corpus), self.assertRaises(ValueError):
                 NGramPredictor(corpus)
+
+    def test_normalization_combines_counts_and_matches_input(self):
+        model = NGramPredictor("او يك او یک او دو")
+        self.assertEqual(model.predict("او", 2), "یک")
+        model = NGramPredictor("كتاب خوب کتاب خوب")
+        for context in ("كتاب", "کتاب"):
+            with self.subTest(context=context):
+                self.assertEqual(model.predict(context, 2), "خوب")
 
     def test_instances_are_independent(self):
         other = NGramPredictor("i run")
