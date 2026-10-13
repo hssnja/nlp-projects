@@ -7,12 +7,13 @@ import re
 
 
 def tokenize(text: str, *, prediction_mode: bool = False) -> list[str]:
-    """Apply the original course regex rules, preserving their order.
+    """Normalize letter variants and apply the course regex rules in order.
 
     Prediction mode preserves Project 2's punctuation rule and removes only
     the period and Persian comma. This is not a linguistic Persian tokenizer.
     """
-    text = text.lower()
+    # Normalize Arabic letter variants commonly found in Persian text.
+    text = text.translate(str.maketrans({"ي": "ی", "ك": "ک"})).lower()
     text = re.sub('([a-z]+)(?=[0-9]+)', '\\g<0> ', text)
     text = re.sub('([0-9]+)(?=[a-z]+)', '\\g<0> ', text)
     text = re.sub('([a-z]+)(?=[^a-z\\s]+)', '\\g<0> ', text)
