@@ -70,12 +70,14 @@ replace `sample.txt` with the path to a UTF-8 text file. Put local corpora in
 «طرح آزمایش‌هایی به منظور مقایسه‌ی کارایی و قدرت پیش‌بینی مدل‌های مختلف n-gram».
 اولین کنفرانس بین‌المللی دستاوردهای نوین پژوهشی در مهندسی برق و کامپیوتر.
 [Paper on Civilica](https://civilica.com/doc/496991).
+English translation of the title: *Designing experiments to compare the
+performance and predictive power of different n-gram models.*
 
 [2] علی ریحانیان، محمدرضا فیضی درخشی، علیرضا فیضی درخشی، میرعرفان غیبی
 «ارایه ی یک جداساز کلمات با استفاده از عبارات باقاعده».
+
 International Conference on Electrical and Computer Engineering with Emphasis on Indigenous Knowledge،Tehran
 [Paper on Civilica](https://civilica.com/doc/725634).
 
 
-English translation of the title: *Designing experiments to compare the
-performance and predictive power of different n-gram models.*
+
