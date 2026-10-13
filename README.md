@@ -1,70 +1,61 @@
 # NLP Course Projects
 
-Two small Python projects by Hasan Jafari: a rule-based tokenizer and a
-frequency-based next-word predictor. Developed as coursework and cleaned up
-for reproducible command-line use.
+Two projects I developed for my NLP course: a regex tokenizer and an n-gram
+next-word predictor.
 
-## Run
+## 1. Tokenization
 
-Requires **Python 3.10+**. No third-party packages or downloads are needed.
-Open a terminal in this folder. On Windows, use `py` instead of `python` if needed.
+`tokenizer.py` splits text into tokens using a sequence of regular expressions.
+It converts English letters to lowercase, separates letters from numbers, and
+handles punctuation. The output lists each token and its frequency, along
+with the total and unique token counts.
+
+## 2. Next-word prediction
+
+`next_word.py` builds unigram, bigram, trigram, and four-gram frequency tables
+from a text corpus. For each order, it predicts the most frequent word following
+the last `n - 1` tokens of the input. The unigram prediction is simply the most
+frequent token in the corpus. When counts are tied, the first occurrence wins.
+
+## Usage
+
+Requires **Python 3.10+** and uses only the standard library.
+
+Run these commands from the repository folder. On Windows, you can use `py`
+instead of `python`.
 
 ```bash
-# Project 1: print token frequencies, or save them
+# Display token frequencies
 python tokenizer.py sample.txt
+
+# Save the frequency report
 python tokenizer.py sample.txt --output tokens.txt
 
-# Project 2: predict using each of the four n-gram orders
+# Predict the next word
 python next_word.py sample.txt --text "من کتاب خوب"
 
-# Interactive mode (enter e to exit)
+# Start an interactive session; enter e to exit
 python next_word.py sample.txt
 
 # Run tests
 python -m unittest -v
 ```
 
-Replace `sample.txt` with your own UTF-8 text file; quote paths containing spaces.
-The included text is a tiny illustrative example, not an evaluation dataset.
-The original `Book Sample.txt` corpus was not supplied and is not included.
-Keep personal or unlicensed corpora in the ignored `data/` directory.
+The prediction example returns `من` for the unigram model and `می` for the
+bigram, trigram, and four-gram models.
 
-## Projects
+A short Persian sample is included to try the scripts. To use another corpus,
+replace `sample.txt` with the path to a UTF-8 text file. Put local corpora in
+`data/` to keep them out of Git.
 
-- **`tokenizer.py`** lowercases text, applies the original ordered regex rules,
-  and reports token frequencies in sorted token order. Punctuation is counted.
-- **`next_word.py`** counts unigrams through four-grams. It uses the final
-  `n - 1` input tokens as context and returns the most frequent continuation.
-  Ties are resolved by first occurrence in the training corpus, as before.
-  Unigrams return the most frequent corpus token regardless of the input.
+## Notes
 
-For the sample query above, the predictions are `من`, `می`, `می`, and `می`
-for orders 1 through 4, respectively.
+- The tokenizer does not normalize Persian and Arabic character variants or
+  perform morphological analysis.
+- Prediction uses slightly different tokenization: standalone periods and
+  Persian commas are removed, and inputs such as `.5` stay together.
+- N-grams can cross sentence boundaries. The model uses raw counts without
+  smoothing or backoff, so an unseen context produces no prediction.
+- The sample text is for demonstration; it is too small to evaluate prediction
+  quality.
 
-## Method and limitations
-
-The regex tokenizer is a course exercise, not a full Persian language
-preprocessor: it does not normalize Persian/Arabic character variants or
-handle morphology and zero-width joiners linguistically.
-
-Project 2 retains its original preprocessing: standalone `.` and `،` tokens
-are removed, and its punctuation rule differs slightly from Project 1
-(for example, `.5` stays together). These differences are explicit in the
-shared tokenizer's `prediction_mode` option.
-
-N-grams span the whole token stream, including sentence boundaries after
-punctuation removal. There is no smoothing, backoff, or sentence-boundary
-modeling. Unseen contexts produce no prediction. This preserves the original
-method; it is not a modern language model, and no accuracy claims are made.
-
-## Cleanup
-
-Shared tokenization replaces duplicate functions while retaining both original
-behaviors. Standard-library counters replace NumPy and NLTK frequency counting.
-The predictor stores context counts instead of repeatedly scanning every n-gram.
-Scripts now have explicit input paths, safe imports, command-line options,
-and clear errors for unreadable files, empty corpora, and invalid orders.
-
-The unfinished `AAI_Project2_code_playground.py` was a duplicate prototype with
-a syntax error; it is intentionally excluded. The runnable Project 2 is the
-basis of `next_word.py`. Tests cover tokenization, prediction, ties, and edge cases.
