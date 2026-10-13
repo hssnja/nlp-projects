@@ -12,6 +12,11 @@ with the total and unique token counts.
 
 ## 2. Next-word prediction
 
+The prediction method follows Experiment 5 (Section 2.2.1) of the paper by
+my supervisor, Ali Reihanian, and Mohammadreza Feizi-Derakhshi [1]. This project
+implements the next-word selection step; it does not reproduce the paper's
+human evaluation or its other experiments.
+
 `next_word.py` builds unigram, bigram, trigram, and four-gram frequency tables
 from a text corpus. For each order, it predicts the most frequent word following
 the last `n - 1` tokens of the input. The unigram prediction is simply the most
@@ -32,7 +37,7 @@ python tokenizer.py sample.txt
 python tokenizer.py sample.txt --output tokens.txt
 
 # Predict the next word
-python next_word.py sample.txt --text "من کتاب خوب"
+python next_word.py sample.txt --text "تو به من"
 
 # Start an interactive session; enter e to exit
 python next_word.py sample.txt
@@ -41,21 +46,30 @@ python next_word.py sample.txt
 python -m unittest -v
 ```
 
-The prediction example returns `من` for the unigram model and `می` for the
-bigram, trigram, and four-gram models.
+For this input, the unigram, bigram, trigram, and four-gram predictions are
+`من`, `یک`, `نگاه`, and `دروغ`, respectively.
 
-A short Persian sample is included to try the scripts. To use another corpus,
+A Persian text sample is included to try the scripts. To use another corpus,
 replace `sample.txt` with the path to a UTF-8 text file. Put local corpora in
 `data/` to keep them out of Git.
 
 ## Notes
 
-- The tokenizer does not normalize Persian and Arabic character variants or
-  perform morphological analysis.
+- Arabic `ي` and `ك` are normalized to Persian `ی` and `ک` in both the corpus
+  and input text. The tokenizer does not perform morphological analysis.
 - Prediction uses slightly different tokenization: standalone periods and
   Persian commas are removed, and inputs such as `.5` stay together.
 - N-grams can cross sentence boundaries. The model uses raw counts without
   smoothing or backoff, so an unseen context produces no prediction.
-- The sample text is for demonstration; it is too small to evaluate prediction
-  quality.
+- The included text is used for demonstration and training, not as a held-out
+  evaluation set. Prediction accuracy has not been evaluated.
 
+## Reference
+
+[1] علی ریحانیان، محمدرضا فیضی درخشی.
+«طرح آزمایش‌هایی به منظور مقایسه‌ی کارایی و قدرت پیش‌بینی مدل‌های مختلف n-gram».
+اولین کنفرانس بین‌المللی دستاوردهای نوین پژوهشی در مهندسی برق و کامپیوتر.
+[Paper on Civilica](https://civilica.com/doc/496991).
+
+English translation of the title: *Designing experiments to compare the
+performance and predictive power of different n-gram models.*
